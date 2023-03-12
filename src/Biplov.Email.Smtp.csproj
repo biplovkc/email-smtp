@@ -13,7 +13,8 @@
 	  <Description>SMTP email service implementation</Description>
 	  <LangVersion>latest</LangVersion>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
+	  <DebugSymbols>true</DebugSymbols>
+	  <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
