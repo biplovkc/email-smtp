@@ -14,7 +14,7 @@ This library provides a simple way to send fault tolerant SMTP emails in .NET ap
 
 - Supports sending plain text and HTML emails.
 - Supports sending emails to multiple recipients and adding CC and BCC recipients.
-- Provides fault tolerance using the `OneOf` and `Polly` libraries.
+- Uses OneOf return types.
 
 ## Installation
 

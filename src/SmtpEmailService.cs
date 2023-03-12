@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Security.Authentication;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using OneOf;
-using OneOf.Types;
-using Polly;
-
-namespace Biplov.Email.Smtp;
+﻿namespace Biplov.Email.Smtp;
 
 public class SmtpEmailService : IEmailService
 {
@@ -23,7 +10,7 @@ public class SmtpEmailService : IEmailService
         _smtpCredentials = smtpCredentials is null ? throw new ArgumentNullException(nameof(smtpCredentials)) : smtpCredentials.Value;
     }
 
-    public async Task<OneOf<Success, FormatException, AuthenticationException, SmtpException, TimeoutException, Exception>> SendAsync(string subject, string message, List<string> receivers, string sender, List<string> bcc = null, string replyTo = null,
+    public async Task<SendOutcome> SendAsync(string subject, string message, List<string> receivers, string sender, List<string> bcc = null, string replyTo = null,
         bool isBodyHtml = false, string correlationId = null,
         CancellationToken cancellationToken = default)
     {
@@ -106,7 +93,7 @@ public class SmtpEmailService : IEmailService
 
     }
 
-    public Task<OneOf<Success, FormatException, AuthenticationException, SmtpException, TimeoutException, Exception>> SendFromTemplateAsync(string templateId, string subject, string message, Dictionary<string, string> templateData, List<string> receivers,
+    public Task<SendOutcome> SendFromTemplateAsync(string templateId, string subject, string message, Dictionary<string, string> templateData, List<string> receivers,
         string sender, List<string> bcc = null, string replyTo = null, bool isBodyHtml = false, string correlationId = null,
         CancellationToken cancellationToken = default)
     {
