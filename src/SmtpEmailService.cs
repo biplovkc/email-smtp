@@ -9,15 +9,17 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using OneOf;
 using OneOf.Types;
+using Polly;
 
 namespace Biplov.Email.Smtp;
 
 public class SmtpEmailService : IEmailService
 {
     private readonly SmtpCredentials _smtpCredentials;
-
-    public SmtpEmailService(IOptions<SmtpCredentials> smtpCredentials)
+    private readonly IAsyncPolicy _asyncPolicy;
+    public SmtpEmailService(IOptions<SmtpCredentials> smtpCredentials, IAsyncPolicy asyncPolicy)
     {
+        _asyncPolicy = asyncPolicy ?? throw new ArgumentNullException(nameof(asyncPolicy));
         _smtpCredentials = smtpCredentials is null ? throw new ArgumentNullException(nameof(smtpCredentials)) : smtpCredentials.Value;
     }
 
@@ -74,7 +76,10 @@ public class SmtpEmailService : IEmailService
                 Timeout = _smtpCredentials.Timeout
             };
 
-            await smtpClient.SendMailAsync(mailMessage, cancellationToken);
+            await _asyncPolicy.ExecuteAsync(async ct =>
+            {
+                await smtpClient.SendMailAsync(mailMessage, cancellationToken);
+            }, cancellationToken);
 
             return new Success();
         }
